@@ -1,4 +1,5 @@
-import { Deck, PokerHand, _getWinner } from '../model/poker';
+import { Deck, CommunityCards, PokerHand, draw } from '../model/cards';
+import { _getWinner } from '../model/texasPoker';
 import _ from 'underscore';
 
 const INITIAL_STATE = 'INITIAL_STATE'
@@ -41,7 +42,8 @@ export const actions = {
 
 const initState = () => {
   return {
-    deck: new Deck(),
+    deck: new Deck().cards,
+    communityCards: new CommunityCards().cards,
     players: [],
     winner: {}
   }
@@ -55,12 +57,14 @@ const ACTION_HANDLERS = {
   DEAL: (state, action) => {
     return {
       ...state,
+      deck: _.first(state.deck, state.deck.length - 2),
       players: [...state.players,
-                {
-                  handId: state.players.length,
-                  hand: state.deck.draw(5)
-                }
-              ]
+                 {
+                   handId: state.players.length,
+                   hand: _.last(state.deck, 2),
+                   realHand: [..._.last(state.deck, 2), ...state.communityCards]
+                 }
+               ]
     }
   },
 
