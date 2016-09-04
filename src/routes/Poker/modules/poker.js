@@ -1,16 +1,26 @@
-import { Deck, CommunityCards, PokerHand, draw } from '../model/cards';
-import { _getWinner } from '../model/texasPoker';
+import { Deck } from '../model/cards';
+import { _getWinner, winningMessage } from '../model/texasPoker';
 import _ from 'underscore';
 
-const INITIAL_STATE = 'INITIAL_STATE'
+const INITIAL_STATE = 'INITIAL_STATE';
+const ADD_PLAYER = 'ADD_PLAYER';
 const DEAL = 'DEAL';
 const GET_WINNER = 'GET_WINNER';
+const GET_WINNNG_MESSAGE = 'GET_WINNNG_MESSAGE';
 const CHANGE_VISIBILITY = 'CHANGE_VISIBILITY';
 const FOLD = 'FOLD';
+const BID = 'BID';
 
 export function initialState(){
   return{
     type: INITIAL_STATE
+  }
+}
+
+export function addPlayer(id){
+  return{
+    type: ADD_PLAYER,
+    payload: id
   }
 }
 
@@ -33,19 +43,31 @@ export function fold(player){
   }
 }
 
+export function bid(amount){
+  return{
+    type: BID,
+    payload: amount
+  }
+}
+
 export const actions = {
   initialState,
+  addPlayer,
   deal,
   getWinner,
-  fold
+  fold,
+  bid
 }
 
 const initState = () => {
   return {
     deck: new Deck().cards,
-    communityCards: new CommunityCards().cards,
+    pot: 0,
+    communityCards: [],
     players: [],
-    winner: {}
+    winner: {},
+    winningCards: [],
+    winningMessage: ''
   }
 }
 
@@ -54,24 +76,42 @@ const ACTION_HANDLERS = {
     return initState();
   },
 
-  DEAL: (state, action) => {
+  ADD_PLAYER: (state, action) => {
     return {
       ...state,
-      deck: _.first(state.deck, state.deck.length - 2),
-      players: [...state.players,
-                 {
-                   handId: state.players.length,
-                   hand: _.last(state.deck, 2),
-                   realHand: [..._.last(state.deck, 2), ...state.communityCards]
-                 }
-               ]
+      players: [...state.players, { id: action.payload }]
+    }
+  },
+
+  DEAL: (state, action) => {
+    let deck = _.first(state.deck, state.deck.length);
+    const communityCards = _.last(deck, 5);
+    deck = _.first(deck, deck.length - 5);
+
+    const hands = _.map(state.players, () => {
+      let hand =  {
+        hand: _.last(deck, 2),
+        realHand: [..._.last(deck, 2), ...communityCards]
+      }
+      deck = _.first(deck, deck.length - 2)
+      return hand;
+    });
+
+    return {
+      ...state,
+      deck: deck,
+      communityCards: communityCards,
+      players: _.map(state.players, (player, key) => Object.assign(player, hands[key]))
     }
   },
 
   GET_WINNER: (state, action) => {
+    const winner = _getWinner(state.players);
     return {
       ...state,
-      winner: _getWinner(state.players)
+      winner: winner,
+      winningCards: winner.cardsIds,
+      winningMessage: winningMessage(winner)
     }
   },
 
@@ -80,7 +120,15 @@ const ACTION_HANDLERS = {
       ...state,
       players: _.without(state.players, action.payload)
     }
-  }
+  },
+
+  BID: (state, action) => {
+    console.log(state.pot)
+    return {
+      ...state,
+      pot: state.pot + action.payload
+    }
+  },
 }
 
 export default function pokerReducer (state = initState(), action) {

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import FaceUpHand from 'components/FaceUpHand';
+import FaceUpHand from '../../containers/FaceUpHandContainer';
 
 export const CommunityCards = ({ communityCards }) => (
   <div>

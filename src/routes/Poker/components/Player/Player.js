@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import Options from '../../containers/OptionsContainer';
-import FaceUpHand from 'components/FaceUpHand';
+import FaceUpHand from '../../containers/FaceUpHandContainer';
 
 export const Player = ({ player }) => (
   <div>

@@ -1,3 +1,3 @@
 import FaceUpHand from './FaceUpHand';
 
-export default FaceUpHand;
+export default FaceUpHand
