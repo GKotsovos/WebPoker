@@ -1,17 +1,28 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import Options from '../../containers/OptionsContainer';
+import PlayerOptions from '../../containers/PlayerOptionsContainer';
 import FaceUpHand from '../../containers/FaceUpHandContainer';
+import _ from 'underscore';
 
-export const Player = ({ player }) => (
+export const Player = ({ players, addPlayer }) => (
   <div>
-    <FaceUpHand hand={player.hand}/>
-    <Options player={player} />
+    {
+      _.map(players, (player, key) =>
+          player.active ? [
+                            !_.isEmpty( player.hand) &&
+                            player.move != 'fold' &&
+                            <FaceUpHand hand={ player.hand } />,
+                            <PlayerOptions player={ player } />
+                          ] :
+                          <button onClick={() => addPlayer(key)}>Join</button>
+      )
+    }
   </div>
 )
 
-Options.propTypes = {
-  player: PropTypes.object.isRequired
+Player.propTypes = {
+  players: PropTypes.array.isRequired,
+  addPlayer: PropTypes.func.isRequired
 };
 
 export default Player;

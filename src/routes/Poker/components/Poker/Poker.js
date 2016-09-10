@@ -1,38 +1,19 @@
 import React, { PropTypes } from 'react';
-import Deck from 'components/Deck';
-import FaceDownHand from 'components/FaceDownHand';
+import GameOptions from '../../containers/GameOptionsContainer';
+import Pot from '../../containers/PotContainer';
 import CommunityCards from '../../containers/CommunityCardsContainer';
-import Player from '../Player';
-import Styles from './Styles/poker.css';
+import Players from '../../containers/PlayerContainer';
+import WinningMessage from '../../containers/WinningMessageContainer';
 import _ from 'underscore';
 
-export const Poker = ({ addPlayer, deal, getWinner, initialState, poker }) => (
+export const Poker = () => (
   <div>
-  <div className={poker.pot == 0 ? Styles.hide : ''}>
-    <h3>{poker.pot}</h3>
-  </div>
-    <button onClick={() => deal()}>deal</button>
-    <button onClick={() => getWinner()}>winner</button>
-    <button onClick={() => initialState()}>reset</button>
+    <GameOptions />
+    <Pot />
     <CommunityCards />
-    <button onClick={() => addPlayer(1)}>Play</button>
-    <button onClick={() => addPlayer(2)}>Play</button>
-    <button onClick={() => addPlayer(3)}>Play</button>
-    <button onClick={() => addPlayer(4)}>Play</button>
-    <button onClick={() => addPlayer(5)}>Play</button>
-    {poker.players.map((player) => <Player player={player} />)}
-    <div className={_.isEmpty(poker.winner) ? Styles.hide : ''}>
-      <h3>{poker.winningMessage}</h3>
-    </div>
-
+    <Players />
+    <WinningMessage />
   </div>
 )
-
-Poker.propTypes = {
-  poker: React.PropTypes.object.isRequired,
-  deal: React.PropTypes.func.isRequired,
-  getWinner: React.PropTypes.func.isRequired,
-  initialState: React.PropTypes.func.isRequired
-};
 
 export default Poker;

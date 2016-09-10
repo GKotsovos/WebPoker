@@ -10,61 +10,61 @@ const evaluate = (hand) => {
   const combinations =
             [
               {
-                  name: "Royal Flush",
+                  name: 'Royal Flush',
                   is: !_.isEmpty(straightFlushHand) && hasAce(straightHand.cards),
                   handValue: 'J' + getHandValue(straightFlushHand),
                   cardsIds: straightFlushHand.cardsIds
               },
               {
-                  name: "Straight flush",
+                  name: 'Straight flush',
                   is: !_.isEmpty(straightFlushHand),
                   handValue: 'I' + getHandValue(straightFlushHand),
                   cardsIds: straightFlushHand.cardsIds
               },
               {
-                  name: "Four of a kind",
+                  name: 'Four of a kind',
                   is: hasDuplicates(pairHand.cards, 4),
                   handValue: 'H' + getHandValue(pairHand),
                   cardsIds: pairHand.cardsIds
               },
               {
-                  name: "Full house",
+                  name: 'Full house',
                   is: hasDuplicates(pairHand.cards, 3) && hasPair(pairHand.cards, 1),
                   handValue: 'G' + getHandValue(pairHand),
                   cardsIds: pairHand.cardsIds
               },
               {
-                  name: "Flush",
+                  name: 'Flush',
                   is: !_.isEmpty(flushHand),
                   handValue: 'F' + getHandValue(flushHand),
                   cardsIds: flushHand.cardsIds
               },
               {
-                  name: "Straight",
+                  name: 'Straight',
                   is: (!_.isEmpty(straightHand) || !_.isEmpty(smallStraightHand)),
                   handValue: 'E' + getHandValue(straightHand),
                   cardsIds: straightHand.cardsIds
               },
               {
-                  name: "Three of a kind",
+                  name: 'Three of a kind',
                   is: hasDuplicates(pairHand.cards, 3),
                   handValue: 'D' + getHandValue(pairHand),
                   cardsIds: pairHand.cardsIds
               },
               {
-                  name: "Two pair",
+                  name: 'Two pair',
                   is: hasPair(pairHand.cards, 2),
                   handValue: 'C' + getHandValue(pairHand),
                   cardsIds: pairHand.cardsIds
               },
               {
-                  name: "One Pair",
+                  name: 'One Pair',
                   is: hasPair(pairHand.cards, 1),
                   handValue: 'B' + getHandValue(pairHand),
                   cardsIds: pairHand.cardsIds
               },
               {
-                  name: "High Card",
+                  name: 'High Card',
                   is: hasNoCombinations(hand),
                   handValue: 'A' + getHandValue(pairHand),
                   cardsIds: pairHand.cardsIds
@@ -121,8 +121,9 @@ const getFlushHand = (hand) => {
   const cards = _.chain(hand)
                  .groupBy('suit')
                  .values()
-                 .filter((pairs) => pairs.length == 5)
+                 .filter((pairs) => pairs.length >= 5)
                  .flatten()
+                 .last(5)
                  .value();
   const cardsIds = getCardsIds(cards);
   const restCards = _.difference(hand, cards);
@@ -147,19 +148,23 @@ const getStraightHand = (hand) => {
 }
 
 const getSmallStraightHand = (hand) => {
-  const smallStraight = [2, 3, 4, 5, 14];
-  const isSmall =  _.every(hand, (card) => _.contains(smallStraight, card.weight));
-  const restCards = _.difference(hand, smallStraight);
-  const cards = _.difference(hand, restCards);
-  const cardsIds = getCardsIds(cards);
-  return isSmall ? { cards, restCards, cardsIds } : {};
+  const smallStraight = [ 2, 3, 4, 5, 14 ];
+  const isSmall =  _.filter(hand, (card) => _.indexOf(smallStraight, card.weight) > -1).length == 5;
+  if(isSmall){
+    const restCards = _.difference(hand, smallStraight);
+    let cards = _.difference(hand, restCards);
+    cards = _.map(cards, (card) => card.weight == 14 ? { ...card, weight: 1 } : card)
+    const cardsIds = getCardsIds(cards);
+    return { cards, restCards, cardsIds };
+  }else{
+    return {};
+  }
 }
 
 const getStraightFlushHand = (hand) => {
-  let straightHand = getStraightHand(hand);
-  let smallStraightHand = getSmallStraightHand(hand);
+  const straightHand = getStraightHand(hand);
+  const smallStraightHand = getSmallStraightHand(hand);
   let cards;
-
   if(!_.isEmpty(straightHand)){
     cards = getFlushHand(straightHand.cards);
   }else if(!_.isEmpty(smallStraightHand)){
@@ -167,7 +172,7 @@ const getStraightFlushHand = (hand) => {
   }else{
     return {};
   }
-  
+
   const cardsIds = getCardsIds(cards);
   const restCards = _.difference(hand, cards);
   return cards.length == 5 ? { cards, restCards, cardsIds } : {};
@@ -210,15 +215,13 @@ export const _getWinner = (players) => {
 
   let handsValue = _.pluck(evalutedHands, 'handValue');
   const maxHandsValue = _.reduce(handsValue,(firstHandValue, nextHandValue) =>
-                                firstHandValue > nextHandValue? firstHandValue : nextHandValue
-  );
+                                firstHandValue > nextHandValue ? firstHandValue : nextHandValue);
   const indexOfMaxValue = _.reduce(handsValue, (indexOfMaxValue, currentValue, index) =>  {
-      if (currentValue === maxHandsValue){
-        indexOfMaxValue.push(index);
-      }
-      return indexOfMaxValue;
-    }, []
-  );
+    if (currentValue === maxHandsValue){
+      indexOfMaxValue.push(index);
+    }
+    return indexOfMaxValue;
+    }, []);
 
   const cardsIds = _.chain(indexOfMaxValue)
                     .map((index) => evalutedHands[index].cardsIds)
@@ -235,11 +238,12 @@ export const _getWinner = (players) => {
 
 export const winningMessage = (winners) => {
   let message = '';
+
   if(winners.id.length == 1){
     message = `The winner is... Player ${_.map(winners.id, (id) => id + ' ')} with a ${winners.combination} combination!`;
-
   }else{
     message = `We have a tie! The winners are... Players ${_.map(winners.id, (id) => id )} with a ${winners.combination} combination!`;
   }
+
   return message;
 }
