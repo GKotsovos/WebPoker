@@ -46,6 +46,12 @@ const evaluate = (hand) => {
                   cardsIds: straightHand.cardsIds
               },
               {
+                  name: 'Straight',
+                  is: !_.isEmpty(smallStraightHand),
+                  handValue: 'E' + getHandValue(smallStraightHand),
+                  cardsIds: straightHand.cardsIds
+              },
+              {
                   name: 'Three of a kind',
                   is: hasDuplicates(pairHand.cards, 3),
                   handValue: 'D' + getHandValue(pairHand),
@@ -142,6 +148,7 @@ const getStraightHand = (hand) => {
                  .flatten()
                  .last(5)
                  .value();
+
   const cardsIds = getCardsIds(cards);
   const restCards = _.difference(hand, cards);
   return cards.length == 5 ? { cards, restCards, cardsIds } : {};
@@ -149,10 +156,16 @@ const getStraightHand = (hand) => {
 
 const getSmallStraightHand = (hand) => {
   const smallStraight = [ 2, 3, 4, 5, 14 ];
-  const isSmall =  _.filter(hand, (card) => _.indexOf(smallStraight, card.weight) > -1).length == 5;
+
+  const uniqHand = _.chain(hand)
+  					  	    .uniq((card) => card.weight)
+                    .value();
+
+  const isSmall =  _.filter(uniqHand, (card) => _.indexOf(smallStraight, card.weight) > -1).length == 5;
+
   if(isSmall){
-    const restCards = _.difference(hand, smallStraight);
-    let cards = _.difference(hand, restCards);
+    let cards = _.filter(hand, (card) => _.contains(smallStraight, card.weight))
+    const restCards = _.difference(hand, cards);
     cards = _.map(cards, (card) => card.weight == 14 ? { ...card, weight: 1 } : card)
     const cardsIds = getCardsIds(cards);
     return { cards, restCards, cardsIds };
@@ -191,10 +204,11 @@ const getHandWeights = (hand) => {
 
 const getRestHandWeight = (restHand) => {
   const restHandPair = getHandWeights(restHand);
-  const restHandUniq = _.chain(restHand)
+  let restHandUniq = _.chain(restHand)
                         .pluck('weight')
                         .reduce((firstWeight, nextWeight) => firstWeight + nextWeight, 0)
                         .value();
+  restHandUniq = transformWeight(restHandUniq.toString());
   return hasDuplicates(restHand) ? 'B' + restHandPair : 'A' + restHandUniq;
 }
 
@@ -212,7 +226,7 @@ const transformWeight = (weights) => {
 
 export const _getWinner = (players) => {
   const evalutedHands = _.map(players, (player) => evaluate(player.realHand));
-
+  
   let handsValue = _.pluck(evalutedHands, 'handValue');
   const maxHandsValue = _.reduce(handsValue,(firstHandValue, nextHandValue) =>
                                 firstHandValue > nextHandValue ? firstHandValue : nextHandValue);

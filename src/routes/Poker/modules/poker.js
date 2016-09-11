@@ -38,10 +38,10 @@ export function getWinner(){
   }
 }
 
-export function fold(player){
+export function fold(id){
   return{
     type: FOLD,
-    payload: player
+    payload: id
   }
 }
 
@@ -115,9 +115,13 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       players: _.map(state.players, (player) =>
-                  player.id == action.payload ? { ...player, active: true, move: 'waiting', money: 5000 } :
-                                                player
-               )
+                  player.id == action.payload ? {
+                                                  ...player,
+                                                  active: true,
+                                                  move: 'waiting',
+                                                  money: 5000
+                                                } :
+                                                player)
     }
   },
 
@@ -149,7 +153,8 @@ const ACTION_HANDLERS = {
                                     ...player,
                                     ...hands[key],
                                     money: player.money - 250,
-                                    bid: 250, move: 'thinking'
+                                    bid: 250,
+                                    move: 'thinking'
                                   } :
                                   player),
       pot: state.pot + _.filter(state.players, (player) => player.active).length * 250,
@@ -161,6 +166,11 @@ const ACTION_HANDLERS = {
     const winner = _getWinner(_.filter(state.players, (player) => player.move != 'fold' && player.active));
     return {
       ...state,
+      players: _.map(state.players, (player) =>
+                  _.contains(winner.id, player.id) ? {
+                                                       ...player,
+                                                       money: player.money + state.pot / winner.id.length
+                                                     } : player),
       winner: winner,
       winningCards: winner.cardsIds,
       winningMessage: winningMessage(winner)
@@ -177,12 +187,12 @@ const ACTION_HANDLERS = {
 
   CHECK: (state, action) => {
     const currentPlayerBid = state.players[action.payload].bid;
-    console.log(currentPlayerBid)
     return {
       ...state,
       players:  _.map(state.players, (player) =>
                   player.id == action.payload ? {
-                                                  ...player, move: 'check',
+                                                  ...player, 
+                                                  move: 'check',
                                                   bid: player.bid + (state.currentMaxBid - player.bid),
                                                   money: player.money - (state.currentMaxBid - player.bid)
                                                 } :
@@ -192,7 +202,6 @@ const ACTION_HANDLERS = {
   },
 
   CALL: (state, action) => {
-    console.log(state.currentMaxBid)
     return {
       ...state,
       players:  _.map(state.players, (player) =>
@@ -201,6 +210,7 @@ const ACTION_HANDLERS = {
   },
 
   BID: (state, action) => {
+    const bid = state.players[action.payload.id].bid + action.payload.amount;
     return {
       ...state,
       players:  _.map(state.players, (player) =>
@@ -211,7 +221,7 @@ const ACTION_HANDLERS = {
                                                    } :
                                                    player),
       pot: state.pot + action.payload.amount,
-      currentMaxBid: state.currentMaxBid + action.payload.amount
+      currentMaxBid: Math.max(state.currentMaxBid, bid)
     }
   },
 

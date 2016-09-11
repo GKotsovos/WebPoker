@@ -3,7 +3,7 @@ import { fold, check, call, bid, leave } from '../modules/poker';
 import PlayerOptions from '../components/PlayerOptions';
 
 const mapActionCreators = {
-  fold: (player) => fold(player),
+  fold: (id) => fold(id),
   check: (id) => check(id),
   call: (id) => call(id),
   bid: (amount) => bid(amount),
