@@ -1,27 +1,58 @@
 import React, { PropTypes, Component } from 'react';
 import classnames from 'classnames';
+import Styles from 'styles/main.css';
 
 export class PlayerOptions extends Component{
   render(){
     const { player, fold, check, call, bid, leave } = this.props;
     return (
-      <div>
+      <div className="form-group">
         {
           (player.move != 'waiting') && (player.move != 'fold') ? [
-              <button onClick={() => fold(player.id)}>fold</button>,
-              <button onClick={() => check(player.id)}>check</button>,
-              <button onClick={() => call(player.id)}>call</button>,
-              <input ref={ node => {
-                  this.amount = node
-                }
-              } />,
-              <button onClick={() => {
-                bid({ id: player.id, amount: Number(this.amount.value) })
-                this.amount.value = '';
-              }}>bid</button>,
-              <text>{`Money: ${player.money}`}</text>
+              <div className={Styles['options' + player.id]}>
+                <h3>{`Money: ${player.money}`}</h3>
+              <div>
+                <input
+                  type="text"
+                  className={`form-control ${Styles.input}`}
+                  ref={ node => {
+                    this.amount = node
+                  }}
+                />
+                <button
+                  type="button"
+                  className="btn btn-default"
+                  onClick={() => {
+                    bid({ id: player.id, amount: Number(this.amount.value) })
+                    this.amount.value = '';
+                  }}
+                >Bid</button>
+              </div>
+
+              <button
+                type="button"
+                className="btn btn-default"
+                onClick={() => fold(player.id)}
+              >Fold</button>
+
+              <button
+                type="button"
+                className="btn btn-default"
+                onClick={() => check(player.id)}
+              >Check</button>
+
+              <button
+                type="button"
+                className="btn btn-default"
+                onClick={() => call(player.id)}
+              >Call</button>
+              </div>
             ] :
-            <button onClick={() => leave(player.id)}>leave</button>
+            <button
+              type="button"
+              className={`btn btn-default ${Styles['player' + player.id]}`}
+              onClick={() => leave(player.id)}
+            >Leave</button>
         }
       </div>
     )

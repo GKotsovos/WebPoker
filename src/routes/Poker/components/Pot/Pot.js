@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import Styles from './Styles/poker.css';
+import Styles from 'styles/main.css';
 import _ from 'underscore';
 
 export const Pot = ({ pot }) => (
-  <div className={pot == 0 ? Styles.hide : ''}>
-    <h3>Pot:{' '}{pot}</h3>
+  <div className={Styles.pot}>
+    <h2>{ pot === 0 ? null : `Pot:${pot}` }</h2>
   </div>
 )
 

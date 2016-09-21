@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import PlayerOptions from '../../containers/PlayerOptionsContainer';
 import FaceUpHand from '../../containers/FaceUpHandContainer';
+import Styles from 'styles/main.css'
 import _ from 'underscore';
 
 export const Player = ({ players, addPlayer }) => (
@@ -11,10 +12,15 @@ export const Player = ({ players, addPlayer }) => (
           player.active ? [
                             !_.isEmpty( player.hand) &&
                             player.move != 'fold' &&
-                            <FaceUpHand hand={ player.hand } />,
+                            <FaceUpHand hand={ player.hand } id={ key }/>,
                             <PlayerOptions player={ player } />
                           ] :
-                          <button onClick={() => addPlayer(key)}>Join</button>
+                          <button
+                            type="button"
+                            className={`btn btn-default ${Styles['player' + key]}`}
+                            id={key}
+                            onClick={() => addPlayer(key)}
+                          >Join</button>
       )
     }
   </div>

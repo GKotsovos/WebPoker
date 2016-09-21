@@ -1,13 +1,14 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import Styles from 'styles/Cards/cards.css';
+import Styles2 from 'styles/main.css'
 import FaceUpCard from 'components/FaceUpCard';
 import SelectedCard from 'components/SelectedCard';
 import FaceDownCard from 'components/FaceDownCard';
 import _ from 'underscore';
 
 export const CommunityCards = ({ communityCards, selected }) => (
-  <div className={`${Styles.playingCards} ${Styles.simpleCards}`}>
+  <div className={`${Styles.playingCards} ${Styles.simpleCards} ${Styles2.communityCards}`}>
     {
       !_.isEmpty(communityCards) &&
       _.map(communityCards, (card) =>

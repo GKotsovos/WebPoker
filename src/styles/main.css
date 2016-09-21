@@ -1,0 +1,162 @@
+.poker {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1133px;
+  height: 671px;
+  background-image: url('styles/table.png');
+  position: relative;
+}
+
+h3 {
+  color: white;
+}
+
+h2 {
+  color: white;
+  font-weight: bold;
+}
+
+.pot {
+  position: absolute;
+  top: 38%;
+  right:45%;
+  transform: translateY(-50%);
+}
+
+.communityCards {
+  position: absolute;
+  top: 50%;
+  right:36%;
+  transform: translateY(-50%);
+}
+
+.winningMessage {
+  position: absolute;
+  top: 26%;
+  right: 24.5%;
+  width: 571px;
+}
+
+.winningMessage h3{
+  color: yellow;
+}
+
+.gameOptions {
+  position: absolute;
+  top: 0%;
+  left:-17%;
+}
+
+.options0 {
+  position: absolute;
+  top: 75%;
+  right:85%;
+}
+
+.options1 {
+  position: absolute;
+  top: 84%;
+  right:43%;
+}
+.options2 {
+  position: absolute;
+  top: 75%;
+  right:-2%;
+}
+.options3 {
+  position: absolute;
+  top: 0%;
+  right:-1%;
+}
+
+.options4 {
+  position: absolute;
+  top: -6%;
+  right:43%;
+}
+
+.options5 {
+  position: absolute;
+  top: 0%;
+  left:0%;
+}
+
+.hand0 {
+  position: absolute;
+  top:62%;
+  left: 14%;
+}
+
+.hand1 {
+  position: absolute;
+  top:70%;
+  left: 44.3%;
+}
+
+.hand2 {
+  position: absolute;
+  top:62%;
+  left: 76%;
+}
+
+.hand3 {
+  position: absolute;
+  top:25%;
+  left: 76%;
+}
+
+.hand4 {
+  position: absolute;
+  top:16.5%;
+  left: 44.3%;
+}
+
+.hand5 {
+  position: absolute;
+  top:25%;
+  left: 14%;
+}
+
+
+.player0 {
+  position: absolute;
+  top: 78.4%;
+  right:91.3%;
+}
+.player1 {
+  position: absolute;
+  top: 87.5%;
+  right:48.3%;
+}
+.player2 {
+  position: absolute;
+  top: 78.4%;
+  right:4.3%;
+}
+.player3 {
+  position: absolute;
+  top: 8.8%;
+  right: 9.3%;
+}
+
+.player4 {
+  position: absolute;
+  top: 2%;
+  right:48%;
+}
+
+.player5 {
+  position: absolute;
+  top: 8.5%;
+  right:87%;
+}
+
+.input {
+  width: 122px;
+  display: inline;
+}
+
+body {
+  background-color: black;
+}

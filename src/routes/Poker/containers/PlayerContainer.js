@@ -6,8 +6,8 @@ const mapActionCreators = {
   addPlayer: (id) => addPlayer(id)
 };
 
-const mapStateToProps = (state) => ({
-  players: state.poker.players
+const mapStateToProps = ({ poker: { players } }) => ({
+  players
 });
 
 export default connect(mapStateToProps, mapActionCreators)(Player);

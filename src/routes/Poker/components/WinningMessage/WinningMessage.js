@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import Styles from './Styles/poker.css';
+import Styles from 'styles/main.css';
 import _ from 'underscore';
 
 export const WinningMessage = ({ winner, winningMessage }) => (
-  <div className={_.isEmpty(winner) ? Styles.hide : ''}>
-    <h3>{winningMessage}</h3>
+  <div className={Styles.winningMessage}>
+    <h3>{ _.isEmpty(winner) ? null : winningMessage }</h3>
   </div>
 )
 

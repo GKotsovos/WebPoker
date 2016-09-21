@@ -181,7 +181,11 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       players:  _.map(state.players, (player) =>
-                  player.id == action.payload ? { ...player, move: 'fold' } : player)
+                  player.id == action.payload ? {
+                                                  ...player,
+                                                  move: 'fold'
+                                                } :
+                                                player)
     }
   },
 
@@ -191,7 +195,7 @@ const ACTION_HANDLERS = {
       ...state,
       players:  _.map(state.players, (player) =>
                   player.id == action.payload ? {
-                                                  ...player, 
+                                                  ...player,
                                                   move: 'check',
                                                   bid: player.bid + (state.currentMaxBid - player.bid),
                                                   money: player.money - (state.currentMaxBid - player.bid)
@@ -205,7 +209,11 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       players:  _.map(state.players, (player) =>
-                  player.id == action.payload ? { ...player, move: 'call' } : player)
+                  player.id == action.payload ? {
+                                                  ...player,
+                                                  move: 'call'
+                                                } :
+                                                player)
     }
   },
 
@@ -229,7 +237,10 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       players: _.map(state.players, (player) =>
-                  player.id == action.payload ? { ...player, active: false } :
+                  player.id == action.payload ? {
+                                                  ...player,
+                                                  active: false
+                                                } :
                                                 player)
     }
   },
@@ -240,9 +251,17 @@ const ACTION_HANDLERS = {
       ...state,
       stage: stages[action.payload],
       communityCards: _.map(communityCards, (card, key) =>
-                          key - 1 <= action.payload ? { ...card, visible: true } : card),
+                          key - 1 <= action.payload ? {
+                                                        ...card,
+                                                        visible: true
+                                                      } :
+                                                      card),
       players: _.map(state.players, (player) =>
-                  player.move != 'fold' ? { ...player, move: 'thinking' } : player)
+                  player.move != 'fold' ? {
+                                            ...player,
+                                            move: 'thinking'
+                                          } :
+                                          player)
     }
   }
 }
