@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import Styles from 'styles/Cards/cards.css';
-import Styles2 from 'styles/main.css'
+import Styles2 from 'styles/main.scss'
 import FaceUpCard from 'components/FaceUpCard';
 import SelectedCard from 'components/SelectedCard';
 import _ from 'underscore';

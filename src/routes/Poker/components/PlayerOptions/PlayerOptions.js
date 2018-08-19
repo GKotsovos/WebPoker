@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import classnames from 'classnames';
-import Styles from 'styles/main.css';
+import Styles from 'styles/main.scss';
 
 export class PlayerOptions extends Component{
   render(){

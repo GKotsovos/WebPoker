@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Styles from 'styles/main.css'
+import Styles from 'styles/main.scss'
 import _ from 'underscore';
 
 export const GameOptions = ({ deal, getWinner, initialState }) => (

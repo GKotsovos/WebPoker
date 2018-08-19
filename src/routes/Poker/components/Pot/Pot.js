@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import Styles from 'styles/main.css';
+import Styles from 'styles/main.scss';
 import _ from 'underscore';
 
 export const Pot = ({ pot }) => (

@@ -4,7 +4,7 @@ import Pot from '../../containers/PotContainer';
 import CommunityCards from '../../containers/CommunityCardsContainer';
 import Players from '../../containers/PlayerContainer';
 import WinningMessage from '../../containers/WinningMessageContainer';
-import Styles from 'styles/main.css';
+import Styles from 'styles/main.scss';
 
 export const Poker = () => (
   <div className={Styles.poker}>

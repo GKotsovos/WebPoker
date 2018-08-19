@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import classnames from 'classnames';
 import PlayerOptions from '../../containers/PlayerOptionsContainer';
 import FaceUpHand from '../../containers/FaceUpHandContainer';
-import Styles from 'styles/main.css'
+import Styles from 'styles/main.scss'
 import _ from 'underscore';
 
 export const Player = ({ players, addPlayer }) => (
